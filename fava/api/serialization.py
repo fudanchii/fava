@@ -81,7 +81,7 @@ def serialize_inventory(inventory, at_cost=False):
         inventory = inventory.cost()
     else:
         inventory = inventory.units()
-    return {p.units.currency: p.units.number
+    return {str(p.units.currency): p.units.number
             for p in inventory if p.units.number != ZERO}
 
 
