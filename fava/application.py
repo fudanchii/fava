@@ -34,6 +34,7 @@ app.config['USER_SETTINGS'] = None
 app.config['HELP_DIR'] = resource_path('docs')
 app.config['HAVE_EXCEL'] = HAVE_EXCEL
 app.config['APIS'] = {}
+app.config['APIS_SETTINGS'] = {}
 
 
 def load_file():
@@ -43,7 +44,27 @@ def load_file():
         if not slug:
             slug = slugify(filepath)
         app.config['APIS'][slug] = api
+        app.config['APIS_SETTINGS'][slug] = \
+            load_settings_from_entries(api.settings)
     app.config['FILE_SLUGS'] = list(app.config['APIS'].keys())
+
+
+def load_settings_from_entries(settings):
+    config_values = {}
+    for option in config.bool_options:
+        if option in settings:
+            config_values[option] = bool(settings[option])
+    for option in config.int_options:
+        if option in settings:
+            config_values[option] = int(settings[option])
+    for option in config.list_options:
+        if option in settings:
+            config_values[option] = str(settings[option]).strip().split(" ")
+    for option in config.str_options:
+        if option in settings:
+            config_values[option] = str(settings[option])
+
+    return config_values
 
 
 def load_settings():
@@ -240,6 +261,8 @@ def source():
             load_settings()
         else:
             g.api.set_source(file_path, source)
+            app.config['APIS_SETTINGS'][g.beancount_file_slug] = \
+                load_settings_from_entries(g.api.settings)
         return str(True)
 
 
@@ -349,6 +372,7 @@ def pull_beancount_file(endpoint, values):
     if g.beancount_file_slug not in app.config['FILE_SLUGS']:
         abort(404)
     g.api = app.config['APIS'][g.beancount_file_slug]
+    app.config.update(app.config['APIS_SETTINGS'][g.beancount_file_slug])
 
 
 @app.context_processor

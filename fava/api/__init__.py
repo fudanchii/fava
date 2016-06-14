@@ -90,6 +90,19 @@ def _sidebar_links(entries):
             for entry in sidebar_link_entries]
 
 
+def _settings(entries):
+    """ Parse custom entries for fava settings. They have the following format:
+
+    2016-04-01 custom "fava-option" "[setting_name]" [setting_value]
+
+    """
+    settings_entries = [
+        entry for entry in _filter_entries_by_type(entries, Custom)
+        if entry.type == 'fava-option']
+    return {entry.values[0].value: entry.values[1].value
+            for entry in settings_entries}
+
+
 class BeancountReportAPI():
     """An instance of this class provides methods to access and filter the
     entries in the given beancount file."""
@@ -134,6 +147,7 @@ class BeancountReportAPI():
             self.all_root_account, leaf_only=True)
 
         self.sidebar_links = _sidebar_links(self.all_entries)
+        self.settings = _settings(self.all_entries)
 
         self._apply_filters()
 
