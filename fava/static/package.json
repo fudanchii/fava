@@ -38,6 +38,7 @@
     "jquery": "^2.2.0",
     "jquery-dragster": "catmanjan/jquery-dragster",
     "jquery-stupid-table": "medsabir/Stupid-Table-Plugin#feat-npm-publish",
+    "lodash.debounce": "^4.0.7",
     "mousetrap": "^1.5.3",
     "normalize.css": "^4.1.1",
     "urijs": "^1.18.0"

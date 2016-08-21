@@ -10,6 +10,8 @@ const URI = require('urijs');
 
 const CodeMirror = require('codemirror/lib/codemirror');
 
+const debounce = require('lodash.debounce');
+
 require('codemirror/mode/sql/sql');
 require('codemirror/addon/mode/simple');
 
@@ -166,11 +168,11 @@ $(document).ready(() => {
     const el = document.getElementById('source-editor');
     const editor = CodeMirror.fromTextArea(el, defaultOptions);
 
-    editor.on('keyup', (cm, event) => {
+    editor.on('keyup', debounce((cm, event) => {
       if (!cm.state.completionActive && event.keyCode !== 13) {
         CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
       }
-    });
+    }, 750));
     const line = parseInt(new URI(location.search).query(true).line, 10);
     if (line > 0) {
       editor.setCursor(line - 1, 0);

@@ -143,12 +143,12 @@ ol.tree-table {
        p > span {
             &.num-header,
             &.num {
-                width: 20rem / ($i+1);
+                width: 28.5rem / ($i+1);
                 font-size: $num_fraction;
             }
             &.other-header,
             &.other {
-                width: 20rem / ($i+1) + 3rem;
+                width: 28.5rem / ($i+1) + 3rem;
                 font-size: $num_fraction;
             }
        }
